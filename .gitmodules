@@ -1,0 +1,9 @@
+[submodule "hub"]
+	path = hub
+	url = git@github.com:radicaldesigns/spokes-auth.git
+[submodule "s3"]
+	path = s3
+	url = git@github.com:radicaldesigns/spokes-s3.git
+[submodule "templator"]
+	path = templator
+	url = git@github.com:radicaldesigns/templator.git
