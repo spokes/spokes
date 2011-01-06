@@ -116,21 +116,21 @@ function log(msg){
 }
 
 function help(){
-  return "\n\
-  \n\
-  commands:\n\
-  list_spokes()\n\
-  start_spokes()\n\
-  stop_spokes()\n\
-  start_spoke( app_name )\n\
-  stop_spoke( app_name )\n\
-  restart_spoke( app_name )\n\
-  \n\
-  globals:\n\
-  config.path\n\
-  config.restart_timeout\n\
-  spokes\n\
-  \n";
+  print_to_screen({
+		app_name:'monitor', 
+		text:"commands:\n"+
+			"list_spokes()\n"+
+			"start_spokes()\n"+
+			"stop_spokes()\n"+
+			"start_spoke( app_name )\n"+
+			"stop_spoke( app_name )\n"+
+			"restart_spoke( app_name )\n"+
+			"\n"+
+			"globals:\n"+
+			"config.path\n"+
+			"config.restart_timeout\n"+
+			"spokes\n"
+	});
 }
 
 function append_file(path,text){
