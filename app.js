@@ -11,6 +11,8 @@ var config = {
 
 var spokes = {};
 
+var port = process.env.SPOKES_PORT || 5001
+var host = process.env.SPOKES_HOST || '127.0.0.1'
 net.createServer(function (socket) {
   cmd_line_stream = socket;
   var cmd_line = repl.start("spokes> ", cmd_line_stream);
@@ -27,7 +29,8 @@ net.createServer(function (socket) {
   cmd_line.context.help = help; 
   cmd_line.context.append_file = append_file;
   cmd_line.context.spoke_exists = spoke_exists;
-}).listen(5001);
+}).listen(port, host);
+print_to_screen({app_name:'monitor', text:'Telnet to '+host+':'+port+' to manage spokes'});
 
 start_spokes();
 
@@ -35,6 +38,7 @@ function start_spokes(){
   var files = fs.readdirSync(config.path);
   files.forEach(function(dir_name){
     if(dir_name === 'log') return;
+    if(dir_name === '.git') return;
     var stat = fs.statSync(dir_name);
     if(stat.isDirectory()) start_spoke(dir_name);
   });
@@ -51,7 +55,7 @@ function start_spoke(app_name){
       restart_enabled: true
     };
   }
-  var start_msg = 'Attempting to start '+app_name+' at '+path+'\n';
+  var start_msg = 'Attempting to start '+app_name+' at '+path;
   print_to_screen({ app_name:'monitor', text: start_msg});
   log({ app_name:'monitor', text: start_msg});
 
@@ -152,7 +156,7 @@ function _path_to_spoke(app_name){
   try{
       fs.statSync(path_to_app);
   } catch(err) {
-    var warning = 'WARNING '+path_to_app+' does not exist\n'; 
+    var warning = 'WARNING '+path_to_app+' does not exist'; 
     print_to_screen({app_name:'monitor',text:warning});
     log({app_name:'monitor',text:warning});
     return false;
