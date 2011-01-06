@@ -22,7 +22,9 @@ net.createServer(function (socket) {
   cmd_line.context.stop_spoke = stop_spoke;
   cmd_line.context.restart_spoke = restart_spoke;
   cmd_line.context.list_spokes = list_spokes;
+  cmd_line.context.print_to_screen = print_to_screen;
   cmd_line.context.log = log;
+  cmd_line.context.help = help; 
   cmd_line.context.append_file = append_file;
   cmd_line.context.spoke_exists = spoke_exists;
 }).listen(5001);
@@ -111,6 +113,24 @@ function log(msg){
   var text = msg.app_name+': '+msg.text+'\n';
   append_file(config.path+'/log/log.txt', text);
   append_file(config.path+'/log/'+msg.app_name+'.txt', text);    
+}
+
+function help(){
+  return "\n\
+  \n\
+  commands:\n\
+  list_spokes()\n\
+  start_spokes()\n\
+  stop_spokes()\n\
+  start_spoke( app_name )\n\
+  stop_spoke( app_name )\n\
+  restart_spoke( app_name )\n\
+  \n\
+  globals:\n\
+  config.path\n\
+  config.restart_timeout\n\
+  spokes\n\
+  \n";
 }
 
 function append_file(path,text){
