@@ -3,7 +3,7 @@ var net = require('net');
 var repl = require("repl");
 var fs = require('fs');
 var spawn = require('child_process').spawn;
-var cmd_line_stream;
+
 var config = {
   path: __dirname,
   restart_timeout: 10000
@@ -13,24 +13,6 @@ var spokes = {};
 
 var port = process.env.SPOKES_PORT || 5001
 var host = process.env.SPOKES_HOST || '127.0.0.1'
-net.createServer(function (socket) {
-  cmd_line_stream = socket;
-  var cmd_line = repl.start("spokes> ", cmd_line_stream);
-  cmd_line.context.config = config;
-  cmd_line.context.spokes = spokes;
-  cmd_line.context.start_spokes = start_spokes;
-  cmd_line.context.start_spoke = start_spoke;
-  cmd_line.context.stop_spokes = stop_spokes;
-  cmd_line.context.stop_spoke = stop_spoke;
-  cmd_line.context.restart_spoke = restart_spoke;
-  cmd_line.context.list_spokes = list_spokes;
-  cmd_line.context.print_to_screen = print_to_screen;
-  cmd_line.context.log = log;
-  cmd_line.context.help = help; 
-  cmd_line.context.append_file = append_file;
-  cmd_line.context.spoke_exists = spoke_exists;
-}).listen(port, host);
-print_to_screen({app_name:'monitor', text:'Telnet to '+host+':'+port+' to manage spokes'});
 
 start_spokes();
 
@@ -55,8 +37,7 @@ function start_spoke(app_name){
       restart_enabled: true
     };
   }
-  var start_msg = 'Attempting to start '+app_name+' at '+path;
-  print_to_screen({ app_name:'monitor', text: start_msg});
+  var start_msg = 'Attempting to start '+app_name+' at '+path+'\n';
   log({ app_name:'monitor', text: start_msg});
 
   spokes[app_name].process = spawn('node',[path]);
@@ -72,7 +53,6 @@ function start_spoke(app_name){
   spokes[app_name].process.on('exit', function (code) {
     var msg = { app_name: app_name, text:'exited with code ' + code+'\n'};
     spokes[app_name].running = false;
-    print_to_screen(msg);
     log(msg);
     if(_should_restart(app_name)) start_spoke(app_name);
   });
@@ -108,13 +88,18 @@ function list_spokes(){
 }
 
 function print_to_screen(msg){
-  var text = msg.text+'\n';
+  var text;
+  if(typeof(msg) === 'string'){
+    text = msg;
+  }else{
+    text = msg.text;
+  }
   console.log(text);
-  if(cmd_line_stream) cmd_line_stream.write(text);
 }
 
 function log(msg){
-  var text = msg.app_name+': '+msg.text+'\n';
+  var text = msg.app_name+': '+msg.text;
+  print_to_screen(text);
   append_file(config.path+'/log/log.txt', text);
   append_file(config.path+'/log/'+msg.app_name+'.txt', text);    
 }
