@@ -7,3 +7,6 @@
 [submodule "templator"]
 	path = templator
 	url = git@github.com:radicaldesigns/templator.git
+[submodule "petitioner"]
+	path = petitioner
+	url = git@github.com:radicaldesigns/petitioner.git
