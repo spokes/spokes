@@ -11,12 +11,18 @@ var config = {
 
 var spokes = {};
 
-var port = process.env.SPOKES_PORT || 5001
-var host = process.env.SPOKES_HOST || '127.0.0.1'
-
 start_spokes();
 
 function start_spokes(){
+  console.log('');
+  console.log('         |             ');
+  console.log('     \\   |   /         ');
+  console.log('       \\ | /     Spokes');
+  console.log('   ----- O -----       ');
+  console.log('       / | \\           ');
+  console.log('     /   |   \\         ');
+  console.log('         |             ');
+  console.log('');
   var files = fs.readdirSync(config.path);
   files.forEach(function(dir_name){
     if(dir_name === 'log') return;
