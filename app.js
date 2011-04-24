@@ -27,7 +27,7 @@ switch(process.argv[2]) {
 		
 		start_spokes();
 
-    daemon.daemonize( '/dev/null', config.lockFile, function (err, started) {
+    daemon.daemonize( '/dev/null', config.lock_file, function (err, started) {
       if (err) {
         console.dir(err.stack);
         return console.log('Error starting spokes: ' + err);
