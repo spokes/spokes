@@ -11,5 +11,5 @@
 	path = petitioner
 	url = git@github.com:radicaldesigns/petitioner.git
 [submodule "say"]
-	path = say 
-	url = git@github.com:radicaldesigns/say-server.git 
+	path = say
+	url = git@github.com:radicaldesigns/say.git
