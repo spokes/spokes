@@ -3,7 +3,6 @@ var net = require('net');
 var repl = require("repl");
 var fs = require('fs');
 var spawn = require('child_process').spawn;
-var daemon = require('daemon');
 
 var config = {
   path: __dirname,
@@ -13,34 +12,7 @@ var config = {
 
 var spokes = {};
 
-
-// Handle start stop commands
-switch(process.argv[2]) {
-  case "stop":
-    daemon.kill(config.lock_file, function (err, pid) {
-      if (err) return console.log('Error stopping spokes: ' + err);
-      console.log('Successfully stopped spokes with pid: ' + pid);
-    });
-    break;
-    
-  case "start":
-		
-		start_spokes();
-
-    daemon.daemonize( '/dev/null', config.lock_file, function (err, started) {
-      if (err) {
-        console.dir(err.stack);
-        return console.log('Error starting spokes: ' + err);
-      }
-      console.log('Successfully started spokes');
-    });
-    break;
-    
-  default:
-    console.log('Usage: [start|stop]');
-    break;
-}
-
+start_spokes();
 
 function start_spokes(){
   console.log('');
